@@ -26,6 +26,7 @@ interface AuditPageProps {
   initialGran?: Gran
   userId?: string
   tonePref?: Tone
+  isAdmin?: boolean
 }
 
 export default function AuditPage({
@@ -34,6 +35,7 @@ export default function AuditPage({
   initialGran = 30,
   userId,
   tonePref = 'lewis',
+  isAdmin = false,
 }: AuditPageProps) {
   const [tone] = useState<Tone>(tonePref)
   const [gran, setGranState] = useState<Gran>(initialGran)
@@ -213,7 +215,7 @@ export default function AuditPage({
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <TopBar weekLabel={lbl} onPrint={onPrint} pdfLoading={pdfLoading} onShiftWeek={onShiftWeek} onShareWeek={onShareWeek} userId={userId} />
+      <TopBar weekLabel={lbl} onPrint={onPrint} pdfLoading={pdfLoading} onShiftWeek={onShiftWeek} onShareWeek={onShareWeek} userId={userId} isAdmin={isAdmin} />
 
       {shareUrl && (
         <div style={{

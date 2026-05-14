@@ -15,12 +15,14 @@ export default async function WeekPage({ params }: Props) {
   let initialGran: Gran = 30
   let tonePref: 'lewis' | 'neutral' | 'utility' = 'lewis'
 
+  let isAdmin = false
+
   if (session?.user?.id) {
     const [week, user] = await Promise.all([
       prisma.week.findUnique({
         where: { userId_weekStart: { userId: session.user.id, weekStart: new Date(weekStart) } },
       }),
-      prisma.user.findUnique({ where: { id: session.user.id }, select: { defaultGran: true, tonePref: true } }),
+      prisma.user.findUnique({ where: { id: session.user.id }, select: { defaultGran: true, tonePref: true, isAdmin: true } }),
     ])
     if (week) {
       initialBlocks = week.blocks as WeekBlocks
@@ -29,6 +31,7 @@ export default async function WeekPage({ params }: Props) {
     if (user) {
       initialGran = (user.defaultGran as Gran) || 30
       tonePref = (user.tonePref as typeof tonePref) || 'lewis'
+      isAdmin = user.isAdmin
     }
   }
 
@@ -39,6 +42,7 @@ export default async function WeekPage({ params }: Props) {
       initialGran={initialGran}
       userId={session?.user?.id}
       tonePref={tonePref}
+      isAdmin={isAdmin}
     />
   )
 }

@@ -10,9 +10,10 @@ interface TopBarProps {
   onShiftWeek: (delta: number) => void
   onShareWeek: () => void
   userId?: string
+  isAdmin?: boolean
 }
 
-export default function TopBar({ weekLabel, onPrint, pdfLoading, onShiftWeek, onShareWeek, userId }: TopBarProps) {
+export default function TopBar({ weekLabel, onPrint, pdfLoading, onShiftWeek, onShareWeek, userId, isAdmin }: TopBarProps) {
   return (
     <header className="no-print" style={{
       background: 'var(--aa-off-white)',
@@ -68,6 +69,12 @@ export default function TopBar({ weekLabel, onPrint, pdfLoading, onShiftWeek, on
       <button className="ta-btn ta-btn--blue" onClick={onPrint} disabled={pdfLoading}>
         {pdfLoading ? 'Generating...' : 'Save PDF ››'}
       </button>
+
+      {isAdmin && (
+        <Link href="/admin" className="ta-btn ta-btn--ghost ta-btn--sm" style={{ textDecoration: 'none' }}>
+          Admin
+        </Link>
+      )}
 
       {userId ? (
         <button
