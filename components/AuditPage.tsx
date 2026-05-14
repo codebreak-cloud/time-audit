@@ -84,10 +84,11 @@ export default function AuditPage({
     return regridWeek(stored.week, stored.gran, gran)
   }, [stored, gran])
 
-  // Persist to localStorage
+  // Persist to localStorage only for anonymous users — logged-in users rely on DB
   useEffect(() => {
+    if (userId) return
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(weeks)) } catch {}
-  }, [weeks])
+  }, [weeks, userId])
 
   // Debounced DB save
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
