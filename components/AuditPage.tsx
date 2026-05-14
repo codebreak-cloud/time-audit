@@ -93,10 +93,14 @@ export default function AuditPage({
 
   // Debounced DB save
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const pendingSave = useRef<{ key: string; gran: Gran; week: WeekBlocks } | null>(null)
+
   const saveToDb = useCallback((key: string, gran: Gran, week: WeekBlocks) => {
     if (!userId) return
+    pendingSave.current = { key, gran, week }
     if (saveTimer.current) clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(async () => {
+      pendingSave.current = null
       await fetch(`/api/week/${key}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -104,6 +108,18 @@ export default function AuditPage({
       })
     }, 500)
   }, [userId])
+
+  const flushSave = useCallback(async () => {
+    if (!pendingSave.current) return
+    if (saveTimer.current) clearTimeout(saveTimer.current)
+    const { key, gran, week } = pendingSave.current
+    pendingSave.current = null
+    await fetch(`/api/week/${key}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ gran, blocks: week }),
+    })
+  }, [])
 
   const setGran = (g: Gran) => {
     setGranState(g)
@@ -217,7 +233,7 @@ export default function AuditPage({
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <TopBar weekLabel={lbl} onPrint={onPrint} pdfLoading={pdfLoading} onShiftWeek={onShiftWeek} onShareWeek={onShareWeek} userId={userId} isAdmin={isAdmin} />
+      <TopBar weekLabel={lbl} onPrint={onPrint} pdfLoading={pdfLoading} onShiftWeek={onShiftWeek} onShareWeek={onShareWeek} userId={userId} isAdmin={isAdmin} flushSave={flushSave} />
 
       {shareUrl && (
         <div style={{

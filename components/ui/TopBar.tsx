@@ -11,9 +11,10 @@ interface TopBarProps {
   onShareWeek: () => void
   userId?: string
   isAdmin?: boolean
+  flushSave?: () => Promise<void>
 }
 
-export default function TopBar({ weekLabel, onPrint, pdfLoading, onShiftWeek, onShareWeek, userId, isAdmin }: TopBarProps) {
+export default function TopBar({ weekLabel, onPrint, pdfLoading, onShiftWeek, onShareWeek, userId, isAdmin, flushSave }: TopBarProps) {
   return (
     <header className="no-print" style={{
       background: 'var(--aa-off-white)',
@@ -75,7 +76,7 @@ export default function TopBar({ weekLabel, onPrint, pdfLoading, onShiftWeek, on
       {userId ? (
         <button
           className="ta-btn ta-btn--ghost ta-btn--sm"
-          onClick={() => { localStorage.removeItem('aa-time-audit-v1'); signOut({ callbackUrl: '/sign-in' }) }}
+          onClick={async () => { await flushSave?.(); localStorage.removeItem('aa-time-audit-v1'); signOut({ callbackUrl: '/sign-in' }) }}
         >
           Sign out
         </button>
