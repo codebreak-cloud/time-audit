@@ -22,11 +22,7 @@ export default function TopBar({ weekLabel, onPrint, pdfLoading, onShiftWeek, on
       display: 'flex', alignItems: 'center', gap: 20,
       position: 'sticky', top: 0, zIndex: 5,
     }}>
-      <div style={{
-        fontFamily: 'var(--font-heading)', fontWeight: 700,
-        fontSize: 18, letterSpacing: '-0.01em',
-        textTransform: 'uppercase', color: 'var(--aa-purple)',
-      }}>AA</div>
+      <img src="/amplifier-logo.png" alt="Amplifier" style={{ height: 40, width: 'auto' }} />
 
       <div style={{ height: 24, width: 2, background: 'var(--aa-purple-ink)', opacity: 0.5 }} />
 
