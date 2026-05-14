@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  weeks        Week[]
+  shareLinks   ShareLink[]
+
+  defaultGran  Int    @default(30)
+  tonePref     String @default("lewis")
+}
+
+model Week {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekStart DateTime
+  gran      Int
+  blocks    Json
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, weekStart])
+  @@index([userId, weekStart])
+}
+
+model ShareLink {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekStart DateTime
+  expiresAt DateTime?
+  viewedAt  DateTime?
+  createdAt DateTime  @default(now())
+}

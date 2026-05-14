@@ -1,26 +1,95 @@
 @import "tailwindcss";
 
+/* ============================================================
+   ADHERENCE AMPLIFIER — DESIGN TOKENS
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --aa-purple:       #584f9c;
+  --aa-purple-deep:  #3d3778;
+  --aa-purple-ink:   #1f1b49;
+  --aa-purple-tint:  #e7e9f3;
+  --aa-purple-line:  #c9cde0;
+  --aa-white:        #ffffff;
+  --aa-blue:         #4bbcfa;
+  --aa-off-white:    #f6f5f1;
+  --aa-bone:         #eceae3;
+  --aa-grey-900:     #1a1a1a;
+  --aa-grey-700:     #3b3b3b;
+  --aa-grey-500:     #6b6b6b;
+  --aa-grey-300:     #b5b5b5;
+  --aa-grey-100:     #e6e6e4;
+  --aa-black:        #000000;
+  --aa-red:          #d4352b;
+  --aa-red-deep:     #a1221a;
+  --aa-gold:         #c7a24a;
+
+  --fg-1:            var(--aa-purple-ink);
+  --fg-2:            var(--aa-grey-700);
+  --fg-3:            var(--aa-grey-500);
+  --fg-brand:        var(--aa-purple);
+  --fg-accent:       var(--aa-blue);
+  --fg-danger:       var(--aa-red);
+  --bg-1:            var(--aa-off-white);
+  --bg-2:            var(--aa-bone);
+  --border-1:        var(--aa-purple-line);
+  --border-strong:   var(--aa-purple-ink);
+
+  --font-heading:    "Poppins", -apple-system, "Helvetica Neue", sans-serif;
+  --font-body:       "Poppins", -apple-system, "Helvetica Neue", sans-serif;
+  --font-mono:       "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --font-brush:      "Permanent Marker", cursive;
+
+  --shadow-print-purple: 6px 6px 0 var(--aa-purple-ink);
+  --shadow-print-blue:   6px 6px 0 var(--aa-blue);
+
+  --ease-punch: cubic-bezier(.2,.8,.2,1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0;
+  background: var(--aa-off-white);
+  color: var(--aa-purple-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; }
+::selection { background: var(--aa-purple); color: #fff; }
+
+.ta-noselect, .ta-noselect * {
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Poster button */
+.ta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-heading); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; font-size: 13px;
+  padding: 12px 18px;
+  border: 2px solid var(--aa-purple-ink);
+  background: var(--aa-purple); color: #fff;
+  border-radius: 0; cursor: pointer;
+  transition: transform 120ms var(--ease-punch), background 120ms;
 }
+.ta-btn:hover  { background: var(--aa-purple-deep); transform: translateY(-1px); }
+.ta-btn:active { transform: translateY(1px); }
+.ta-btn--blue  { background: var(--aa-blue); color: var(--aa-purple-ink); }
+.ta-btn--blue:hover { background: #2aa9ef; }
+.ta-btn--ghost { background: transparent; color: var(--aa-purple-ink); }
+.ta-btn--ghost:hover { background: var(--aa-purple-tint); transform: none; }
+.ta-btn--sm    { padding: 8px 12px; font-size: 11px; letter-spacing: 0.1em; }
+
+@media print {
+  @page { size: A4 portrait; margin: 14mm; }
+  body { background: #fff; }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+}
+.print-only { display: none; }
