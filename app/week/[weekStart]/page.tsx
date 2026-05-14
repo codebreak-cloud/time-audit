@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 import AuditPage from '@/components/AuditPage'
@@ -10,6 +11,7 @@ interface Props {
 export default async function WeekPage({ params }: Props) {
   const { weekStart } = await params
   const session = await auth()
+  if (!session?.user) redirect('/sign-in')
 
   let initialBlocks: WeekBlocks | undefined
   let initialGran: Gran = 30
