@@ -14,8 +14,9 @@ model User {
   weeks        Week[]
   shareLinks   ShareLink[]
 
-  defaultGran  Int    @default(30)
-  tonePref     String @default("lewis")
+  defaultGran  Int     @default(30)
+  tonePref     String  @default("lewis")
+  isAdmin      Boolean @default(false)
 }
 
 model Week {
