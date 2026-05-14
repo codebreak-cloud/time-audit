@@ -75,7 +75,7 @@ export default function TopBar({ weekLabel, onPrint, pdfLoading, onShiftWeek, on
       {userId ? (
         <button
           className="ta-btn ta-btn--ghost ta-btn--sm"
-          onClick={() => signOut({ callbackUrl: '/sign-in' })}
+          onClick={() => { localStorage.removeItem('aa-time-audit-v1'); signOut({ callbackUrl: '/sign-in' }) }}
         >
           Sign out
         </button>
