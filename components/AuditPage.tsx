@@ -49,26 +49,28 @@ export default function AuditPage({
     return startOfWeek(new Date())
   })
 
-  // Start with server-provided data (or empty). Merge localStorage in useEffect
-  // after mount to avoid SSR/client hydration mismatch.
+  // Start with DB data only — never pre-seed demo here as it would
+  // overwrite real localStorage data during the merge below.
   const [weeks, setWeeks] = useState<Record<string, StoredWeek>>(() => {
     if (initialBlocks && initialWeekStart) {
       return { [initialWeekStart]: { gran: initialGran, week: initialBlocks } }
     }
-    const seedKey = weekKey(startOfWeek(new Date()))
-    return { [seedKey]: { gran: 30, week: demoWeek(30) } }
+    return {}
   })
 
-  // Hydrate from localStorage once on the client after first render
+  // Hydrate from localStorage after mount, then seed demo only if nothing exists
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (!raw) return
-      const saved = JSON.parse(raw) as Record<string, StoredWeek>
-      // If the server gave us DB data for this week, that takes priority.
-      // Otherwise merge in everything from localStorage.
+      const saved = raw ? JSON.parse(raw) as Record<string, StoredWeek> : {}
       setWeeks(prev => {
+        // DB data (in prev) beats localStorage; localStorage beats nothing
         const merged = { ...saved, ...prev }
+        // Only seed demo if the current week has no data at all
+        const seedKey = weekKey(startOfWeek(new Date()))
+        if (!merged[seedKey]) {
+          merged[seedKey] = { gran: 30, week: demoWeek(30) }
+        }
         return merged
       })
     } catch {}
