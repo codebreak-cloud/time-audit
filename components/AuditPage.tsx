@@ -213,7 +213,7 @@ export default function AuditPage({
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <TopBar weekLabel={lbl} onPrint={onPrint} pdfLoading={pdfLoading} onShiftWeek={onShiftWeek} onShareWeek={onShareWeek} />
+      <TopBar weekLabel={lbl} onPrint={onPrint} pdfLoading={pdfLoading} onShiftWeek={onShiftWeek} onShareWeek={onShareWeek} userId={userId} />
 
       {shareUrl && (
         <div style={{

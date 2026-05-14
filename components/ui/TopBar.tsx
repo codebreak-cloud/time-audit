@@ -1,14 +1,18 @@
 'use client'
 
+import Link from 'next/link'
+import { signOut } from 'next-auth/react'
+
 interface TopBarProps {
   weekLabel: string
   onPrint: () => void
   pdfLoading?: boolean
   onShiftWeek: (delta: number) => void
   onShareWeek: () => void
+  userId?: string
 }
 
-export default function TopBar({ weekLabel, onPrint, pdfLoading, onShiftWeek, onShareWeek }: TopBarProps) {
+export default function TopBar({ weekLabel, onPrint, pdfLoading, onShiftWeek, onShareWeek, userId }: TopBarProps) {
   return (
     <header className="no-print" style={{
       background: 'var(--aa-off-white)',
@@ -64,6 +68,19 @@ export default function TopBar({ weekLabel, onPrint, pdfLoading, onShiftWeek, on
       <button className="ta-btn ta-btn--blue" onClick={onPrint} disabled={pdfLoading}>
         {pdfLoading ? 'Generating...' : 'Save PDF ››'}
       </button>
+
+      {userId ? (
+        <button
+          className="ta-btn ta-btn--ghost ta-btn--sm"
+          onClick={() => signOut({ callbackUrl: '/sign-in' })}
+        >
+          Sign out
+        </button>
+      ) : (
+        <Link href="/sign-in" className="ta-btn ta-btn--ghost ta-btn--sm" style={{ textDecoration: 'none' }}>
+          Sign in ›
+        </Link>
+      )}
     </header>
   )
 }
